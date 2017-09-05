@@ -11,6 +11,7 @@
 <script src="js/fastclick.js"></script>
 <script src="js/back_btn.js"></script>
 <!--<script src="js/console.log.js"></script>-->
+<script src="js/notification.js"></script>
 <script src="cordova.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbPsguoXSMVc_pAeyZWTLFvW4aeAsYcbs&callback=initMapForLocation"></script>
 <script>
@@ -99,7 +100,7 @@ $(document).ready(function () {
 	$("#my_location").click(function(){
 		if ($("#my_location").hasClass("active")) {
 			map.panTo(my_location_gps.getPosition());
-			map.setZoom(13);
+			//map.setZoom(13);
 		}
 	});
 	
@@ -262,7 +263,7 @@ function getLocation(func) {
 		if ( device.platform == 'Android' ){//Android,iOS,win7=WinCE,win8=Win32NT
 			document.addEventListener("backbutton", go_back_map, false);
 		}
-		register_notification();
+		register_notification_home();
 		
 	}
 //////////////////////////////////////////////////
