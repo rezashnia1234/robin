@@ -22,7 +22,7 @@ function register_notification_home() {
 			// data.registrationId
 			// alert("registration event: " + data.registrationId);
 			$.ajax({ type: "POST",
-					url: "http://app.postermovement.com/SMCMS_notification/RegisterDeviceIDtoDB.php", 
+					url: "http://dlsmgroup.ir/temp/robin/RegisterDeviceIDtoDB.php", 
 					data: {regID : data.registrationId,user:window.localStorage.getItem('uuid'),OS:device.platform},
 					async: false,
 					success : function(text)
