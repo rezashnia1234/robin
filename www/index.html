@@ -261,7 +261,7 @@ function getLocation(func) {
 		})();
 		
 		if ( device.platform == 'Android' ){//Android,iOS,win7=WinCE,win8=Win32NT
-			document.addEventListener("backbutton", go_back_map, false);
+			document.addEventListener("backbutton", exit, false);
 		}
 		register_notification_home();
 		
