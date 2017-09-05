@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>بسم الله الرحمن الرحیم</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+<link rel="stylesheet" type="text/css" href="css/font.css">
+
+<script src="js/jquery-1.11.0.min.js"></script>
+<script src="js/fastclick.js"></script>
+<script src="js/back_btn.js"></script>
+<!--<script src="js/console.log.js"></script>-->
+<script src="cordova.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbPsguoXSMVc_pAeyZWTLFvW4aeAsYcbs&callback=initMapForLocation"></script>
+<script>
+	var my_location_gps;
+	function getParameterByName(name) {
+		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+			results = regex.exec(location.search);
+		return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
+    $( document ).ready(function() {
+        console.log( "document loaded" );
+		
+    });
+	function init() {		
+		console.log('SMGROUP ::::::::::::::::::::::::::::::::::::    start init()');
+		document.addEventListener("deviceready", onDeviceReady, false);
+		radius = 0;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var lat = 36.295138333333;
+var lng = 59.583763333333;
+var showRealTime = true;
+var driverId = 2;
+var my_markers = [];
+var my_infowindow = [];
+var iconBase = 'images/icons/';
+var icons = {
+  car: {
+	icon: iconBase + 'car.svg'
+  },
+  my_location: {
+	icon: iconBase + 'location.svg'
+  }
+};
+
+var startPlaceMarker = null;
+var map = null;
+var infowindow = null;
+var contentString = null;
+
+
+
+
+
+$(document).ready(function () {
+	/*
+   if(typeof(showRealTime) !== 'undefined'){
+       setInterval(function () {
+           $.get('http://87.98.170.213/admin/driver/get-current-location/' + driverId, function (data) {
+               removeStartPlaceMarker();
+               if(map){
+                   var position = {lat:  parseFloat(data.lat), lng: parseFloat(data.lng)}
+                   startPlaceMarker = new google.maps.Marker({
+                       position: position,
+                       map: map
+                   });
+               }
+           });
+       },1000);
+   }
+   */
+   /**/
+   if(typeof(showRealTime) !== 'undefined'){
+       setInterval(function () {
+           $.get('http://87.98.170.213/admin/driver/get-current-locations/', function (data) {
+				//removeStartPlaceMarker(my_markers);
+				var i;
+				for (i = 0; i < data.length; ++i) {
+					if(map){
+						var position = {lat:  parseFloat(data[i].lat), lng: parseFloat(data[i].lng)};
+						//console.log(position);
+						
+						if(typeof(my_markers[i]) === 'undefined'){
+							my_markers[i] = new google.maps.Marker({
+								position: position,
+								icon: icons['car'].icon,
+								title: data[i].driver_name + " " + data[i].driver_last_name,
+								map: map
+							});
+							
+							contentString = "<div class='balloon_text' >" + data[i].driver_name + " " + data[i].driver_last_name + "</div>";
+							my_infowindow[i] = new google.maps.InfoWindow({
+							  content: contentString
+							});
+
+							var key = i;
+							google.maps.event.addListener(my_markers[key], 'click', function(innerKey) {
+								return function() {
+									for (x = 0; x < my_infowindow.length; ++x) {
+										my_infowindow[x].close();
+									}
+									my_infowindow[innerKey].open(map, my_markers[innerKey]);
+								}
+							}(key));
+						}
+						else
+						{
+							my_markers[i].setPosition(position);
+						}
+					}
+				}
+           });
+       },1000);
+   }
+   
+});
+
+function initMapForLocation() {
+
+    var startPoint = {lat: lat, lng: lng};
+    var startPlace = document.getElementById('place-map');
+    map = new google.maps.Map(startPlace, {
+        zoom: 12,
+        center: startPoint
+    });
+
+	
+	
+
+
+}
+
+
+function removePlaceMarker() {
+	for (i = 0; i < my_markers.length; ++i) {
+		if(map){
+			if(typeof(my_markers[i]) !== 'undefined'){
+				my_markers[i].setMap(null);
+			}
+		}
+	}
+	my_markers = [];
+	my_infowindow = [];
+}
+
+function getLocation(func) {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(func);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	function onDeviceReady() {
+		
+		console.log('SMGROUP ::::::::::::::::::::::::::::::::::::    start onDeviceReady()');
+		//FastClick.attach(document.getElementById('button'));
+		/**/
+		(function(){
+			console.log('SMGROUP ::::::::::::::::::::::::::::::::::::    start getCurrentPosition()');
+			navigator.geolocation.getCurrentPosition(onSuccess, onError);
+			//console.log("11");
+			setTimeout(arguments.callee, 10000);
+		})();
+		
+		if ( device.platform == 'Android' ){//Android,iOS,win7=WinCE,win8=Win32NT
+			document.addEventListener("backbutton", go_back_map, false);
+		}
+		register_notification();
+		
+	}
+//////////////////////////////////////////////////
+	
+	function alertDismissed() {
+		// do something
+	}
+	function distance(lat1, lon1, lat2, lon2, unit) {
+		var radlat1 = Math.PI * lat1/180
+		var radlat2 = Math.PI * lat2/180
+		var radlon1 = Math.PI * lon1/180
+		var radlon2 = Math.PI * lon2/180
+		var theta = lon1-lon2
+		var radtheta = Math.PI * theta/180
+		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+		dist = Math.acos(dist)
+		dist = dist * 180/Math.PI
+		dist = dist * 60 * 1.1515
+		if (unit=="K") { dist = dist * 1.609344 }
+		if (unit=="M") { dist = dist * 1.609344 * 1000 }
+		if (unit=="N") { dist = dist * 0.8684 }
+		return dist;
+	}
+	//////share location//////////////////////////////
+	//////////////////////////////////////////////////
+	function onSuccess(position) {
+		//console.log('SMGROUP ::::::::::::::::::::::::::::::::::::    start onSuccess()');
+		//radius = (position.coords.accuracy / 2) * 1;
+		//my_location_marker.setLatLng([position.coords.latitude,position.coords.longitude]);
+		//my_location_marker.bindPopup("شما در شعاع " + radius + " متری این نقطه هستید");
+		//my_location_circle.setLatLng([position.coords.latitude,position.coords.longitude]);
+		//my_location_circle.setRadius(radius);
+		//console.log("00000:" + position.coords);
+		//$("#location_btn").addClass("active");
+	}
+	
+	function onError(error) { 
+
+	}
+</script>
+<style>
+#place-map {
+    width: 100%;
+    height: 100%;
+	left:0;
+	top:0;
+    position: absolute;
+}
+#my_location {
+    background-image: url(images/location.svg);
+    width: 25px;
+    height: 25px;
+    right: 0;
+    top: 0;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    border-left: 14px solid transparent;
+    border-bottom: 14px solid transparent;
+    border-top: 10px solid transparent;
+    border-right: 14px solid transparent;
+}
+img.gm-fullscreen-control{
+	display:none;
+}
+div.balloon_text{
+	padding-right: 15px;
+}
+</style>
+</head>
+
+<body onload="init();">
+
+
+
+<div id="place-map" class="map"></div>
+<div id="my_location"></div>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
