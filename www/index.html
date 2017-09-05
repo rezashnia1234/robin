@@ -14,7 +14,6 @@
 <script src="cordova.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbPsguoXSMVc_pAeyZWTLFvW4aeAsYcbs&callback=initMapForLocation"></script>
 <script>
-	var my_location_gps;
 	function getParameterByName(name) {
 		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
 		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -72,6 +71,7 @@
 
 var lat = 36.295138333333;
 var lng = 59.583763333333;
+var my_location_gps = null;
 var showRealTime = true;
 var driverId = 2;
 var my_markers = [];
@@ -96,6 +96,14 @@ var contentString = null;
 
 
 $(document).ready(function () {
+	$("#my_location").click(function(){
+		if ($("#my_location").hasClass("active")) {
+			map.panTo(my_location_gps.getPosition());
+			map.setZoom(13);
+		}
+	});
+	
+	
 	/*
    if(typeof(showRealTime) !== 'undefined'){
        setInterval(function () {
@@ -128,6 +136,7 @@ $(document).ready(function () {
 								position: position,
 								icon: icons['car'].icon,
 								title: data[i].driver_name + " " + data[i].driver_last_name,
+								car_id: data[i].driver_id,
 								map: map
 							});
 							
@@ -149,6 +158,8 @@ $(document).ready(function () {
 						else
 						{
 							my_markers[i].setPosition(position);
+							if(my_markers[i].car_id != data[i].driver_id)
+								removePlaceMarker();
 						}
 					}
 				}
@@ -255,6 +266,8 @@ function getLocation(func) {
 		
 	}
 //////////////////////////////////////////////////
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
 	
 	function alertDismissed() {
 		// do something
@@ -275,17 +288,28 @@ function getLocation(func) {
 		if (unit=="N") { dist = dist * 0.8684 }
 		return dist;
 	}
-	//////share location//////////////////////////////
-	//////////////////////////////////////////////////
+
+	
+	
 	function onSuccess(position) {
-		//console.log('SMGROUP ::::::::::::::::::::::::::::::::::::    start onSuccess()');
-		//radius = (position.coords.accuracy / 2) * 1;
-		//my_location_marker.setLatLng([position.coords.latitude,position.coords.longitude]);
-		//my_location_marker.bindPopup("شما در شعاع " + radius + " متری این نقطه هستید");
-		//my_location_circle.setLatLng([position.coords.latitude,position.coords.longitude]);
-		//my_location_circle.setRadius(radius);
-		//console.log("00000:" + position.coords);
-		//$("#location_btn").addClass("active");
+		console.log('SMGROUP ::::::::::::::::::::::::::::::::::::    start onSuccess()');
+		$("#my_location").addClass("active");
+		$("#my_location").css("display","block");
+		if(my_location_gps === null)
+		{
+			var position = {lat:  parseFloat(position.coords.latitude), lng: parseFloat(position.coords.longitude)};
+			my_location_gps = new google.maps.Marker({
+				position: position,
+				icon: icons['my_location'].icon,
+				title: 'موقعیت شما بر روی نقشه',
+				map: map
+			});
+		}
+		else
+		{
+			var position = {lat:  parseFloat(position.coords.latitude), lng: parseFloat(position.coords.longitude)};
+			my_location_gps.setPosition(position);
+		}
 	}
 	
 	function onError(error) { 
@@ -314,6 +338,7 @@ function getLocation(func) {
     border-bottom: 14px solid transparent;
     border-top: 10px solid transparent;
     border-right: 14px solid transparent;
+	display:none;
 }
 img.gm-fullscreen-control{
 	display:none;
