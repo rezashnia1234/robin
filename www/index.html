@@ -263,6 +263,11 @@ function getLocation(func) {
 		if ( device.platform == 'Android' ){//Android,iOS,win7=WinCE,win8=Win32NT
 			document.addEventListener("backbutton", exit, false);
 		}
+
+		if(window.localStorage.getItem('uuid') == null)
+			window.plugins.uniqueDeviceID.get(uniqueDeviceIDsuccess_index, uniqueDeviceIDfail_index);
+		function uniqueDeviceIDsuccess_index(uuid){window.localStorage.setItem('uuid',uuid);};
+		function uniqueDeviceIDfail_index(uuid){//alert("uniqueDeviceIDfail" + uuid);};
 		register_notification_home();
 		
 	}
