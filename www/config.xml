@@ -53,8 +53,8 @@
 	<!--<plugin spec="https://github.com/apache/cordova-plugin-device-motion.git" source="git" />-->
 	<!--<plugin spec="https://github.com/apache/cordova-plugin-device-orientation.git" source="git" />-->
 	<plugin spec="https://github.com/apache/cordova-plugin-dialogs.git" source="git" />
-	<plugin spec="https://github.com/apache/cordova-plugin-file.git" source="git" />
-	<plugin spec="https://github.com/apache/cordova-plugin-file-transfer.git" source="git" />
+	<!-- <plugin spec="https://github.com/apache/cordova-plugin-file.git" source="git" /> -->
+	<!-- <plugin spec="https://github.com/apache/cordova-plugin-file-transfer.git" source="git" /> -->
 	<plugin spec="https://github.com/apache/cordova-plugin-geolocation.git" source="git" />
 	<!--<plugin spec="https://github.com/apache/cordova-plugin-globalization.git" source="git" />-->
 	<plugin spec="https://github.com/apache/cordova-plugin-inappbrowser.git" source="git" />
