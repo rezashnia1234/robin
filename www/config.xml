@@ -89,7 +89,7 @@
 	
 	<plugin spec="https://github.com/nchutchind/cordova-plugin-streaming-media.git" source="git" />
 	<plugin spec="https://github.com/nchutchind/Vitamio-Cordova-Plugin.git" source="git" />
-	<!-- <plugin spec="https://github.com/rezashnia1234/map_offline_plugin.git" source="git" /> -->
+	<plugin spec="https://github.com/rezashnia1234/map_offline_plugin.git" source="git" />
 	<plugin name="com.telerik.plugins.nativepagetransitions" source="npm" />
 	
     <!-- Define app icon      -->
